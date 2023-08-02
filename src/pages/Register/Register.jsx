@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import NavBar from "../../components/Navbar/Navbar";
 import {
   Avatar,
@@ -36,6 +36,33 @@ const theme = createTheme({
 const defaultTheme = createTheme();
 
 const Login = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [passwordsMatch, setPasswordsMatch] = useState(true);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    alert(`Username : ${username} \nEmail : ${email} \nPassword : ${password}`);
+  };
+
+  const handleConfirmPasswordChange = (event) => {
+    setConfirmPassword(event.target.value);
+    validatePasswordsMatch(password, event.target.value);
+  };
+
+  const validatePasswordsMatch = (password, confirmPassword) => {
+    setPasswordsMatch(password === confirmPassword);
+    console.log("p :" + password + "cp : " + confirmPassword);
+  };
+
+  useEffect(() => {
+    const validatePasswordsMatch = (password, confirmPassword) => {
+      setPasswordsMatch(password === confirmPassword);
+    };
+  }, [password, confirmPassword]);
+
   return (
     <div>
       <NavBar />
@@ -49,7 +76,13 @@ const Login = () => {
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "center",
-              // border: "2px solid black",
+              padding: "1rem",
+              /* From https://css.glass */
+              background: "rgba(25, 18, 210, 0.13)",
+              borderRadius: "16px",
+              boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+              backdropFilter: "blur(8.1px)",
+              border: "1px solid rgba(183, 188, 236, 0.43)",
             }}
           >
             <Avatar sx={{ bgcolor: "secondary.main" }}>
@@ -57,6 +90,8 @@ const Login = () => {
             </Avatar>
             <Typography sx={{ fontSize: "1.5rem" }}>Register</Typography>
             <Box
+              component="form"
+              onSubmit={handleSubmit}
               sx={{
                 mt: 1,
                 maxWidth: "xs",
@@ -73,17 +108,24 @@ const Login = () => {
                 label="Username"
                 name="Username"
                 autoComplete="Username"
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                }}
                 autoFocus
-                sx={{ width: "20rem", margin: ".2rem auto" }} // Add this line to set the desired width
+                sx={{ width: "20rem", margin: ".4rem auto" }} // Add this line to set the desired width
               />
               <TextField
                 margin="normal"
                 required
+                type="email"
                 id="email"
                 label="Email Address"
                 name="email"
                 autoComplete="email"
-                sx={{ width: "20rem", margin: ".2rem auto" }} // Add this line to set the desired width
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+                sx={{ width: "20rem", margin: ".4rem auto" }} // Add this line to set the desired width
               />
               <TextField
                 margin="normal"
@@ -92,19 +134,31 @@ const Login = () => {
                 label="Password"
                 name="password"
                 autoComplete="password"
-                sx={{ width: "20rem", margin: ".2rem auto" }} // Add this line to set the desired width
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  validatePasswordsMatch(e.target.value, confirmPassword);
+                }}
+                sx={{ width: "20rem", margin: ".4rem auto" }} // Add this line to set the desired width
               />
               <TextField
                 margin="normal"
                 required
-                id="password"
+                id="confirmPassword"
                 label=" Confirm Password "
-                name="password"
-                sx={{ width: "20rem", margin: ".2rem auto" }} // Add this line to set the desired width
+                name="confirm password"
+                onChange={(e) => {
+                  setConfirmPassword(e.target.value);
+                  validatePasswordsMatch(e.target.value, password);
+                }}
+                error={!passwordsMatch}
+                helperText={!passwordsMatch && "Passwords do not match"}
+                sx={{ width: "20rem", margin: ".4rem auto" }} // Add this line to set the desired width
               />
               <Custombutton
+                type="submit"
                 variant="contained"
                 sx={{ mt: 2, bgcolor: "green" }}
+                // onClick={handleSubmit}
               >
                 Register
               </Custombutton>

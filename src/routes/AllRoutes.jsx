@@ -5,6 +5,7 @@ import Home from "../pages/Home/Home";
 import NotFound from "../pages/NotFound/NotFound";
 import Login from "../pages/Login/Login";
 import Register from "../pages/Register/Register";
+// import PasswordValidation from "../pages/Register/PasswordValidation";
 
 const AllRoutes = () => {
   return (

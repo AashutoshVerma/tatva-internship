@@ -5,28 +5,29 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Home from "@mui/icons-material/Home";
 import "./Navbar.css";
+import { NavLink } from "react-router-dom";
 
 export default function NavBar() {
   return (
     <AppBar position="static">
       <Toolbar>
-        <a href="/">
-          <Home />
-        </a>
+        <NavLink to="/">
+          <Home sx={{ margin: "1rem" }} color="inherit" />
+        </NavLink>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           TatvaSoft Internship Project
         </Typography>
 
-        <a href="/register">
-          <Button variant="outlined" color="inherit">
+        <NavLink to="/register">
+          <Button variant="contained" color="inherit">
             Register
           </Button>
-        </a>
-        <a href="/login">
-          <Button variant="outlined" color="inherit">
+        </NavLink>
+        <NavLink to="/login">
+          <Button variant="contained" color="inherit" sx={{ m: "1rem" }}>
             Login
           </Button>
-        </a>
+        </NavLink>
       </Toolbar>
     </AppBar>
   );

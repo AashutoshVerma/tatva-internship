@@ -48,7 +48,13 @@ const Login = () => {
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "center",
+              background: "rgba(25, 18, 210, 0.13)",
+              borderRadius: "16px",
+              boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+              backdropFilter: "blur(8.1px)",
+              border: "1px solid rgba(183, 188, 236, 0.43)",
               // border: "2px solid black",
+              padding: "1rem",
             }}
           >
             <Avatar sx={{ bgcolor: "secondary.main" }}>
@@ -73,7 +79,7 @@ const Login = () => {
                 name="email"
                 autoComplete="email"
                 autoFocus
-                sx={{ width: "20rem", margin: "auto" }} // Add this line to set the desired width
+                sx={{ width: "20rem" }} // Add this line to set the desired width
               />
               <TextField
                 margin="normal"
