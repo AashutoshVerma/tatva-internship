@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import NavBar from "../../components/Navbar/Navbar";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   Avatar,
   Box,
@@ -18,6 +20,7 @@ import {
   LockOutlined,
   PhoneLockedRounded,
 } from "@mui/icons-material";
+import axios from "axios";
 
 const CustomButton = styled(Button)(({ theme }) => ({
   "&:hover": {
@@ -35,6 +38,28 @@ const theme = createTheme({
 const defaultTheme = createTheme();
 
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    axios
+      .post("http://localhost:8080/api/users/loginUser", {
+        email: email,
+        password: password,
+      })
+      .then((response) => {
+        if (response.data.data == "User Does not Exists") {
+          toast.error(response.data.data);
+        } else if (response.data.data == "Invalid Credentials") {
+          toast.error(response.data.data);
+        } else if ("Login Successfull") {
+          toast.success(response.data.data);
+        }
+      });
+    console.log(email, password);
+  };
+
   return (
     <div>
       <NavBar />
@@ -62,6 +87,8 @@ const Login = () => {
             </Avatar>
             <Typography sx={{ fontSize: "1.5rem" }}>Sign In</Typography>
             <Box
+              component="form"
+              onSubmit={handleSubmit}
               sx={{
                 mt: 1,
                 maxWidth: "xs",
@@ -74,11 +101,15 @@ const Login = () => {
               <TextField
                 margin="normal"
                 required
+                type="emails"
                 id="email"
                 label="Email Address"
                 name="email"
                 autoComplete="email"
                 autoFocus
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
                 sx={{ width: "20rem" }} // Add this line to set the desired width
               />
               <TextField
@@ -87,15 +118,19 @@ const Login = () => {
                 id="password"
                 label="Password "
                 name="password"
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
                 sx={{ width: "20rem" }} // Add this line to set the desired width
               />
-              <CustomButton variant="contained" sx={{ mt: 2 }}>
+              <CustomButton variant="contained" sx={{ mt: 2 }} type="submit">
                 Submit
               </CustomButton>
             </Box>
           </Box>
         </ThemeProvider>
       </Container>
+      <ToastContainer limit={1} position="top-right" autoClose={2000} />
     </div>
   );
 };

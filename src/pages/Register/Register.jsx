@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "../../components/Navbar/Navbar";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   Avatar,
   Box,
@@ -19,6 +21,7 @@ import {
   LockOutlined,
   PhoneLockedRounded,
 } from "@mui/icons-material";
+import axios from "axios";
 
 const Custombutton = styled(Button)(({ theme }) => ({
   "&:hover": {
@@ -44,7 +47,21 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert(`Username : ${username} \nEmail : ${email} \nPassword : ${password}`);
+    // alert(`Username : ${username} \nEmail : ${email} \nPassword : ${password}`);
+    axios
+      .post("http://localhost:8080/api/users/registerUser", {
+        username: username,
+        email: email,
+        password: password,
+      })
+      .then((response) => {
+        // console.log(response.data);
+        if (response.data.data == "User Already Exists") {
+          toast.error(response.data.data);
+        } else if (response.data.data == "User Created") {
+          toast.success(response.data.data);
+        }
+      });
   };
 
   const handleConfirmPasswordChange = (event) => {
@@ -165,6 +182,7 @@ const Login = () => {
             </Box>
           </Box>
         </ThemeProvider>
+        <ToastContainer limit={1} position="top-right" autoClose={2000} />
       </Container>
     </div>
   );
