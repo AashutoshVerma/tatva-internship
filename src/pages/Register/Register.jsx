@@ -22,6 +22,7 @@ import {
   PhoneLockedRounded,
 } from "@mui/icons-material";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Custombutton = styled(Button)(({ theme }) => ({
   "&:hover": {
@@ -39,18 +40,21 @@ const theme = createTheme({
 const defaultTheme = createTheme();
 
 const Login = () => {
-  const [username, setUsername] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [email, setEmail] = useState("");
   const [passwordsMatch, setPasswordsMatch] = useState(true);
+  const navigateToComponent = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     // alert(`Username : ${username} \nEmail : ${email} \nPassword : ${password}`);
     axios
       .post("http://localhost:8080/api/users/registerUser", {
-        username: username,
+        firstname: firstName,
+        lastname: lastName,
         email: email,
         password: password,
       })
@@ -60,6 +64,9 @@ const Login = () => {
           toast.error(response.data.data);
         } else if (response.data.data == "User Created") {
           toast.success(response.data.data);
+          setTimeout(() => {
+            navigateToComponent("/login");
+          }, 3000);
         }
       });
   };
@@ -118,19 +125,41 @@ const Login = () => {
                 justifyContent: "center",
               }}
             >
-              <TextField
-                margin="normal"
-                required
-                id="Username"
-                label="Username"
-                name="Username"
-                autoComplete="Username"
-                onChange={(e) => {
-                  setUsername(e.target.value);
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  maxWidth: "20rem",
                 }}
-                autoFocus
-                sx={{ width: "20rem", margin: ".4rem auto" }} // Add this line to set the desired width
-              />
+              >
+                <TextField
+                  margin="normal"
+                  required
+                  id="Firstname"
+                  label="Firstname"
+                  name="Firstname"
+                  autoComplete="Firstname"
+                  onChange={(e) => {
+                    setFirstName(e.target.value);
+                  }}
+                  autoFocus
+                  sx={{ width: "20rem", margin: "0 .4rem .2rem 0" }} // Add this line to set the desired width
+                />
+                <TextField
+                  margin="normal"
+                  required
+                  id="Lastname"
+                  label="Lastname"
+                  name="Lastname"
+                  autoComplete="Lastname"
+                  onChange={(e) => {
+                    setLastName(e.target.value);
+                  }}
+                  autoFocus
+                  sx={{ width: "20rem", margin: "0 0 .2rem .4rem" }} // Add this line to set the desired width
+                />
+              </Box>
+
               <TextField
                 margin="normal"
                 required

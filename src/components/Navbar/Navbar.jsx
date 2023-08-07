@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import Home from "@mui/icons-material/Home";
 import "./Navbar.css";
 import { NavLink } from "react-router-dom";
+import SearchBar from "../../components/Searchbar/SearchBar";
 
 export default function NavBar() {
   return (
@@ -17,7 +18,7 @@ export default function NavBar() {
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           TatvaSoft Internship Project
         </Typography>
-
+        {/* <SearchBar variant="outlined" /> */}
         <NavLink to="/register">
           <Button variant="contained" color="inherit">
             Register

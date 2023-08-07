@@ -21,6 +21,7 @@ import {
   PhoneLockedRounded,
 } from "@mui/icons-material";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const CustomButton = styled(Button)(({ theme }) => ({
   "&:hover": {
@@ -40,6 +41,7 @@ const defaultTheme = createTheme();
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigateToComponent = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -55,6 +57,9 @@ const Login = () => {
           toast.error(response.data.data);
         } else if ("Login Successfull") {
           toast.success(response.data.data);
+          setTimeout(() => {
+            navigateToComponent("/");
+          }, 3000);
         }
       });
     console.log(email, password);

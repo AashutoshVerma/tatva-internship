@@ -6,7 +6,7 @@ const App = () => {
     <div>
       <AllRoutes />
       <div className="bg">
-        <svg
+        {/* <svg
           className="bg"
           version="1.1"
           xmlns="http://www.w3.org/2000/svg"
@@ -81,7 +81,7 @@ const App = () => {
               />
             </use>
           </g>
-        </svg>
+        </svg> */}
       </div>
     </div>
   );
