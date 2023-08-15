@@ -38,37 +38,55 @@ const theme = createTheme({
 
 const defaultTheme = createTheme();
 
-const Login = () => {
+const Login = ({ setLoggedIn, setRole, role }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigateToComponent = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios
-      .post("http://localhost:8080/api/users/loginUser", {
-        email: email,
-        password: password,
-      })
-      .then((response) => {
-        if (response.data.data == "User Does not Exists") {
-          toast.error(response.data.data);
-        } else if (response.data.data == "Invalid Credentials") {
-          toast.error(response.data.data);
-        } else if ("Login Successfull") {
-          toast.success(response.data.data);
-          setTimeout(() => {
-            navigateToComponent("/");
-          }, 3000);
-        }
-      });
+    try {
+      axios
+        .post("https://book-e-sell-node-api.vercel.app/api/user/login", {
+          email: email,
+          password: password,
+        })
+        .then((response) => {
+          // console.log(response);
+          if (response.data.key == "SUCCESS") {
+            toast.success("Login Successfull");
+            console.log(response.data.result.roleId);
+            setRole(response.data.result.roleId);
+            console.log("role", role);
+            setTimeout(() => {
+              if (response.data.result.roleId == 1) {
+                setLoggedIn(true);
+                navigateToComponent("/manage");
+              } else {
+                setLoggedIn(true);
+                navigateToComponent("/");
+              }
+            }, 3000);
+          }
+          //  else {
+          //   toast.error("Invalid Credentials");
+          // }
+        })
+        .catch((err) => {
+          toast.error(err.response.data.error);
+        });
+    } catch (error) {
+      toast.error("Some error occured");
+      console.log("error");
+    }
+
     console.log(email, password);
   };
 
   return (
     <div>
-      <NavBar />
-      <Container maxWidth="xs" margin="auto">
+      {/* <NavBar /> */}
+      <Container maxWidth="xs" margin="auto" sx={{ minHeight: "69vh" }}>
         <ThemeProvider theme={theme}>
           <Box
             sx={{

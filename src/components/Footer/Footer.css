@@ -1,0 +1,15 @@
+h3,
+h4 {
+  text-align: center;
+}
+
+.footer {
+  margin: auto;
+  padding: 2rem;
+  color: white;
+  background-color: #1976d2;
+  /* position: fixed;
+  bottom: 0; */
+  /* margin-bottom: 0; */
+  width: 95.8%;
+}

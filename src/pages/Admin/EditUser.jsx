@@ -27,6 +27,7 @@ import {
 } from "@mui/icons-material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import UpdateRoundedIcon from "@mui/icons-material/UpdateRounded";
 
 const Custombutton = styled(Button)(({ theme }) => ({
   "&:hover": {
@@ -43,38 +44,41 @@ const theme = createTheme({
 
 const defaultTheme = createTheme();
 
-const Register = () => {
+const EditUser = ({ userId }) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [email, setEmail] = useState("");
   const [passwordsMatch, setPasswordsMatch] = useState(true);
-  const [roleId, setRoleId] = useState("");
   const navigateToComponent = useNavigate();
+  const [roleId, setRoleId] = useState();
+  const [role, setRole] = useState();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     // alert(`Username : ${username} \nEmail : ${email} \nPassword : ${password}`);
     axios
-      .post("https://book-e-sell-node-api.vercel.app/api/user", {
+      .put("https://book-e-sell-node-api.vercel.app/api/user", {
+        id: userId,
         firstName: firstName,
         lastName: lastName,
         email: email,
-        roleId: roleId,
+        roleId: userId,
+        role: role,
         password: password,
       })
       .then((response) => {
         // console.log(data);
         try {
           if (response.data.key == "SUCCESS") {
-            toast.success("User Created Successfully!");
+            toast.success("User Updated Successfully!");
             setTimeout(() => {
-              navigateToComponent("/login");
+              navigateToComponent("/manage");
             }, 3000);
           }
         } catch (error) {
-          toast.error("User Already Exists, please Login!");
+          toast.error(error.result.err);
         }
         // console.log(response.data.key);
       })
@@ -107,7 +111,8 @@ const Register = () => {
         <ThemeProvider theme={theme}>
           <Box
             sx={{
-              marginTop: 8,
+              marginTop: 4,
+              marginBottom: 4,
               width: "30rem",
               display: "flex",
               flexDirection: "column",
@@ -122,10 +127,10 @@ const Register = () => {
               border: "1px solid rgba(183, 188, 236, 0.43)",
             }}
           >
-            <Avatar sx={{ bgcolor: "secondary.main" }}>
-              <AppRegistration />
+            <Avatar sx={{ bgcolor: "primary.main" }}>
+              <UpdateRoundedIcon />
             </Avatar>
-            <Typography sx={{ fontSize: "1.5rem" }}>Register</Typography>
+            <Typography sx={{ fontSize: "1.5rem" }}>Update User</Typography>
             <Box
               component="form"
               onSubmit={handleSubmit}
@@ -138,6 +143,18 @@ const Register = () => {
                 justifyContent: "center",
               }}
             >
+              <TextField
+                margin="normal"
+                required
+                type="ID"
+                id="ID"
+                label="ID"
+                name="ID"
+                autoComplete="ID"
+                value={userId}
+                placeholder={userId}
+                sx={{ width: "20rem", margin: ".4rem auto" }} // Add this line to set the desired width
+              />
               <Box
                 sx={{
                   display: "flex",
@@ -196,6 +213,12 @@ const Register = () => {
                   sx={{ width: "20rem", margin: ".4rem .2rem" }} // Add this line to set the desired width
                   onChange={(e) => {
                     setRoleId(e.target.value);
+                    if (roleId == 2) {
+                      setRole("seller");
+                    } else if (roleId == 3);
+                    {
+                      setRole("buyer");
+                    }
                   }}
                 >
                   <MenuItem value="">
@@ -238,7 +261,7 @@ const Register = () => {
                 sx={{ mt: 2, bgcolor: "green" }}
                 // onClick={handleSubmit}
               >
-                Register
+                Update
               </Custombutton>
             </Box>
           </Box>
@@ -249,4 +272,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default EditUser;

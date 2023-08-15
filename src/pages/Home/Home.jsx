@@ -32,8 +32,9 @@ import CardMedia from "@mui/material/CardMedia";
 import CardActions from "@mui/material/CardActions";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
+import Login from "../Login/Login";
 
-const Home = () => {
+const Home = ({ isloggedIn, setLoggedIn, setRole, role }) => {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -71,81 +72,88 @@ const Home = () => {
 
   return (
     <div>
-      <NavBar />
-      <Autocomplete
-        sx={{ m: "1rem auto", width: 800 }}
-        freeSolo
-        value={selectedValue}
-        onChange={(event, newValue) => setSelectedValue(newValue)}
-        options={data.map((option) => option.name)}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            label="Search Book"
-            onChange={(event) => setSearchQuery(event.target.value)}
-            InputProps={{
-              ...params.InputProps,
-              endAdornment: (
-                <React.Fragment>
-                  {loading ? (
-                    <CircularProgress color="inherit" size={20} />
-                  ) : null}
-                  {params.InputProps.endAdornment}
-                </React.Fragment>
-              ),
-            }}
-          />
-        )}
-      />
-      <Container>
-        <Grid
-          container
-          spacing={3}
-          sx={{
-            margin: "3rem",
-          }}
-        >
-          {filteredData.map((card) => (
-            <Grid
-              card
-              key={card.id}
-              xs={12}
-              sm={6}
-              md={4}
-              sx={{ margin: " 1rem 0 " }}
-            >
-              <Card
-                sx={{
-                  margin: ".5rem",
-                  height: "100%",
-                  display: "flex",
-                  flexDirection: "column",
+      {/* <NavBar /> */}
+      {isloggedIn ? (
+        <>
+          <Autocomplete
+            sx={{ m: "1rem auto", width: 800 }}
+            freeSolo
+            value={selectedValue}
+            onChange={(event, newValue) => setSelectedValue(newValue)}
+            options={data.map((option) => option.name)}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Search Book"
+                onChange={(event) => setSearchQuery(event.target.value)}
+                InputProps={{
+                  ...params.InputProps,
+                  endAdornment: (
+                    <React.Fragment>
+                      {loading ? (
+                        <CircularProgress color="inherit" size={20} />
+                      ) : null}
+                      {params.InputProps.endAdornment}
+                    </React.Fragment>
+                  ),
                 }}
-              >
-                <CardMedia
-                  component="div"
-                  sx={{
-                    // 16:9
-                    pt: "56.25%",
-                    backgroundSize: "contain",
-                  }}
-                  image={card.base64image}
-                />
-                <CardContent sx={{ flexGrow: 1 }}>
-                  <Typography gutterBottom variant="h5" component="h2">
-                    {card.name}
-                  </Typography>
-                  <Typography>{card.description}</Typography>
-                </CardContent>
-                <CardActions>
-                  <Button size="small">View</Button>
-                  <Button size="small">Edit</Button>
-                </CardActions>
-              </Card>
+              />
+            )}
+          />
+          <Container>
+            <Grid
+              container
+              spacing={3}
+              sx={{
+                margin: "3rem",
+              }}
+            >
+              {filteredData.map((card) => (
+                <Grid
+                  card
+                  key={card.id}
+                  xs={12}
+                  sm={6}
+                  md={4}
+                  sx={{ margin: " 1rem 0 " }}
+                >
+                  <Card
+                    sx={{
+                      margin: ".5rem",
+                      height: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <CardMedia
+                      component="div"
+                      sx={{
+                        // 16:9
+                        pt: "56.25%",
+                        backgroundSize: "contain",
+                      }}
+                      image={card.base64image}
+                    />
+                    <CardContent sx={{ flexGrow: 1 }}>
+                      <Typography gutterBottom variant="h5" component="h2">
+                        {card.name}
+                      </Typography>
+                      <Typography>{card.description}</Typography>
+                      <Typography>{`₹${card.price}`}</Typography>
+                    </CardContent>
+                    <CardActions>
+                      <Button size="small">Add to cart</Button>
+                      <Button size="small">Edit</Button>
+                    </CardActions>
+                  </Card>
+                </Grid>
+              ))}
             </Grid>
-          ))}
-        </Grid>
-      </Container>
+          </Container>
+        </>
+      ) : (
+        <Login setLoggedIn={setLoggedIn} setRole={setRole} role={role} />
+      )}
     </div>
   );
 };
