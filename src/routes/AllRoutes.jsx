@@ -13,27 +13,20 @@ import AddBook from "../pages/Manage/AddBook";
 import AdminManageBooks from "../pages/Admin/AdminManageBooks";
 import EditBook from "../pages/Admin/EditBook";
 import EditUser from "../pages/Admin/EditUser";
+import AdminManageCategory from "../pages/Admin/AdminManageCategory";
+import EditCategory from "../pages/Admin/EditCategory";
+import AddCategory from "../pages/Admin/AddCategory";
 const AllRoutes = () => {
   const [role, setRole] = useState();
   const [isloggedIn, setLoggedIn] = useState(false);
   const [bookId, setBookId] = useState();
   const [userId, setUserId] = useState();
+  const [categoryId, setCategoryId] = useState();
   return (
     <div>
       <BrowserRouter>
         <NavBar role={role} isloggedIn={isloggedIn} setLoggedIn={setLoggedIn} />
         <Routes>
-          {/* <Route
-            path="/home"
-            element={
-              <Home
-                isloggedIn={isloggedIn}
-                setLoggedIn={setLoggedIn}
-                setRole={setRole}
-                role={role}
-              />
-            }
-          /> */}
           <Route
             path="/"
             element={
@@ -42,6 +35,7 @@ const AllRoutes = () => {
                 setLoggedIn={setLoggedIn}
                 setRole={setRole}
                 role={role}
+                setBookId={setBookId}
               />
             }
           />
@@ -60,15 +54,29 @@ const AllRoutes = () => {
           />
           <Route path="/managebooks" element={<ManageBooks role={role} />} />
           <Route path="/addbook" element={<AddBook />} />
+          <Route path="/addCategory" element={<AddCategory />} />
           <Route
             path="/adminmanagebooks"
             element={<AdminManageBooks bookId={bookId} setBookId={setBookId} />}
+          />
+          <Route
+            path="/adminmanagecategory"
+            element={
+              <AdminManageCategory
+                categoryId={categoryId}
+                setCategoryId={setCategoryId}
+              />
+            }
           />
           <Route
             path="/editbook"
             element={<EditBook setBookId={setBookId} bookId={bookId} />}
           />
           <Route path="/edituser" element={<EditUser userId={userId} />} />
+          <Route
+            path="/editcategory"
+            element={<EditCategory categoryId={categoryId} />}
+          />
         </Routes>
         <Footer />
       </BrowserRouter>

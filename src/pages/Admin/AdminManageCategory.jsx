@@ -16,15 +16,16 @@ import { DataGridPro, GridActionsCellItem } from "@mui/x-data-grid-pro";
 import Typography from "@mui/material/Typography";
 import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
 
-const AdminManageBooks = ({ role, setBookId, bookId }) => {
+const AdminManageCategory = ({ role, setCategoryId, bookId }) => {
   const navigatetoComponent = useNavigate();
-  const [books, setBooks] = useState([]);
+  const [category, setCategory] = useState([]);
   const [updated, setUpdated] = useState(false);
+
   useEffect(() => {
     axios
-      .get("https://book-e-sell-node-api.vercel.app/api/book/all")
+      .get("https://book-e-sell-node-api.vercel.app/api/category/all")
       .then((response) => {
-        setBooks(response.data.result);
+        setCategory(response.data.result);
         // console.log(response.data.result);
       });
   }, [updated]);
@@ -33,40 +34,18 @@ const AdminManageBooks = ({ role, setBookId, bookId }) => {
     {
       field: "id",
       headerName: "ID",
-      width: 200,
-      align: "center",
-      headerAlign: "center",
-    },
-    {
-      field: "name",
-      headerName: "Book Name",
       width: 250,
       align: "center",
       headerAlign: "center",
     },
     {
-      field: "description",
-      headerName: "Description",
-      type: "string",
-      length: 300,
-      width: "500",
-      align: "left",
-      headerAlign: "center",
-    },
-    {
-      field: "categoryId",
-      headerName: "Category Id",
-      width: "120",
+      field: "name",
+      headerName: "Category Name",
+      width: 300,
       align: "center",
       headerAlign: "center",
     },
-    {
-      field: "category",
-      headerName: "Category",
-      width: "150",
-      align: "center",
-      headerAlign: "center",
-    },
+
     {
       field: "actions",
       headerName: "Actions",
@@ -166,23 +145,23 @@ const AdminManageBooks = ({ role, setBookId, bookId }) => {
 
   const handleEdit = (id) => {
     // Implement your edit logic here, e.g., navigate to edit page
-    console.log("Edit book with ID:", id);
-    setBookId(id);
-    navigatetoComponent("/editbook");
+    console.log("Edit Category with ID:", id);
+    setCategoryId(id);
+    navigatetoComponent("/editcategory");
   };
 
   const handleDelete = (id) => {
-    if (confirm(`The Book with id:${id} will be deleted! `)) {
+    if (confirm(`The Category with id:${id} will be deleted! `)) {
       axios
-        .delete(`https://book-e-sell-node-api.vercel.app/api/book?id=${id}`)
+        .delete(`https://book-e-sell-node-api.vercel.app/api/category?id=${id}`)
         .then((response) => {
           console.log(response.data);
           setUpdated(!updated);
-          toast.success("Book Deleted");
+          toast.success("Category Deleted");
           // Perform additional actions if needed, such as updating the books state
         })
         .catch((error) => {
-          console.error("Error deleting book:", error);
+          console.error("Error deleting Category:", error);
         });
     }
   };
@@ -206,11 +185,11 @@ const AdminManageBooks = ({ role, setBookId, bookId }) => {
           color: "inherit",
         }}
       >
-        <Typography variant="h5">List of All Books</Typography>
-        <NavLink to="/addbook">
+        <Typography variant="h5">List of All Categories</Typography>
+        <NavLink to="/addcategory">
           <Button variant="contained" color="inherit" sx={{ m: "1rem " }}>
             <AddBoxOutlinedIcon />
-            <Typography ml={1}>Add Book</Typography>
+            <Typography ml={1}>Add Category</Typography>
           </Button>
         </NavLink>{" "}
       </AppBar>
@@ -218,8 +197,13 @@ const AdminManageBooks = ({ role, setBookId, bookId }) => {
         slots={{
           noRowsOverlay: CustomNoRowsOverlay,
         }}
-        sx={{ padding: "1rem", height: "77.3vh", width: "100%" }}
-        rows={books}
+        sx={{
+          padding: "1rem",
+          height: "77.3vh",
+          width: "60%",
+          margin: " auto",
+        }}
+        rows={category}
         columns={columns}
         initialState={{
           pagination: {
@@ -234,4 +218,4 @@ const AdminManageBooks = ({ role, setBookId, bookId }) => {
   );
 };
 
-export default AdminManageBooks;
+export default AdminManageCategory;

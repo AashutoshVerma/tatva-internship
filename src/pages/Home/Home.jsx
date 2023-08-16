@@ -1,23 +1,3 @@
-// import React from "react";
-// import NavBar from "../../components/Navbar/Navbar";
-// import axios from "axios";
-// import SearchBar from "../../components/Searchbar/SearchBar";
-// import BookContainer from "../../containers/BookContainer/BookContainer";
-// const Home = () => {
-//   // axios.get("http://localhost:8080/api/users/getusers").then((response) => {
-//   //   console.table(response.data.data);
-//   // });
-//   return (
-//     <div>
-//       <NavBar />
-//       <SearchBar />
-//       <BookContainer />
-//     </div>
-//   );
-// };
-
-// export default Home;
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -27,20 +7,22 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
-import NavBar from "../../components/Navbar/Navbar";
 import CardMedia from "@mui/material/CardMedia";
 import CardActions from "@mui/material/CardActions";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import Login from "../Login/Login";
+import "./Home.css";
+import { useNavigate } from "react-router-dom";
+import BasicSpeedDial from "../../components/SpeedDial/BasicSpeedDial";
 
-const Home = ({ isloggedIn, setLoggedIn, setRole, role }) => {
+const Home = ({ isloggedIn, setLoggedIn, setRole, role, setBookId }) => {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedValue, setSelectedValue] = useState(null); // Add this line
-
+  const navigatetoComponent = useNavigate();
   useEffect(() => {
     axios
       .get("https://book-e-sell-node-api.vercel.app/api/book/all")
@@ -138,18 +120,39 @@ const Home = ({ isloggedIn, setLoggedIn, setRole, role }) => {
                       <Typography gutterBottom variant="h5" component="h2">
                         {card.name}
                       </Typography>
-                      <Typography>{card.description}</Typography>
+                      <Typography id="bookDescription">
+                        {card.description}
+                      </Typography>
                       <Typography>{`₹${card.price}`}</Typography>
                     </CardContent>
                     <CardActions>
+                      {role == 1 ? (
+                        <Button
+                          size="small"
+                          onClick={() => {
+                            setBookId(card.id);
+                            navigatetoComponent("/editbook");
+                          }}
+                        >
+                          Edit
+                        </Button>
+                      ) : null}
                       <Button size="small">Add to cart</Button>
-                      <Button size="small">Edit</Button>
                     </CardActions>
                   </Card>
                 </Grid>
               ))}
             </Grid>
           </Container>
+          <div
+            style={{
+              position: "fixed",
+              bottom: 16,
+              right: 16,
+            }}
+          >
+            <BasicSpeedDial />
+          </div>
         </>
       ) : (
         <Login setLoggedIn={setLoggedIn} setRole={setRole} role={role} />

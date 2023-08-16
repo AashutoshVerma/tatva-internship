@@ -53,7 +53,19 @@ const AddBook = () => {
   const [categoryId, setCategoryId] = useState("");
   const [price, setPrice] = useState("");
   const [imageUrl, setImageUrl] = useState("");
+  const [categoryData, setCategoryData] = useState([]);
 
+  axios
+    .get("https://book-e-sell-node-api.vercel.app/api/category/all")
+    .then((response) => {
+      if (response.data.key == "SUCCESS") {
+        setCategoryData(response.data.result);
+      }
+    })
+    .catch((err) => {
+      // toast.error(err.response.data.error);
+      console.log(err);
+    });
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(bookName, description, price, categoryId, imageUrl);
@@ -170,19 +182,6 @@ const AddBook = () => {
                   }}
                   sx={{ width: "50%", margin: "0 .4rem .2rem 0" }} // Add this line to set the desired width
                 />
-                {/* <TextField
-                  margin="normal"
-                  required
-                  id="category"
-                  label="Category"
-                  name="Category"
-                  autoComplete="Category"
-                  onChange={(e) => {
-                    setCategoryId(e.target.value);
-                  }}
-                  sx={{ width: "20rem", margin: "0 0 .2rem .4rem" }} // Add this line to set the desired width
-                /> */}
-                {/* <InputLabel id="category">Age</InputLabel> */}
 
                 <FormControl>
                   <InputLabel id="demo-select-small-label">Category</InputLabel>
@@ -199,7 +198,13 @@ const AddBook = () => {
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
-                    <MenuItem value={2}>2 - Historic Fiction</MenuItem>
+                    {categoryData.map((category) => (
+                      <MenuItem key={category.id} value={category.id}>
+                        {category.name}
+                      </MenuItem>
+                    ))}
+
+                    {/* <MenuItem value={2}>2 - Historic Fiction</MenuItem>
                     <MenuItem value={3}>3 - Fantasy</MenuItem>
                     <MenuItem value={4}>4 - Horror</MenuItem>
                     <MenuItem value={5}>5 - Thriller</MenuItem>
@@ -208,7 +213,7 @@ const AddBook = () => {
                     <MenuItem value={8}>8 - Comic Book</MenuItem>
                     <MenuItem value={9}>9 - Spirituality</MenuItem>
                     <MenuItem value={10}>10 - temp Category</MenuItem>
-                    <MenuItem value={11}>11 - Essay New</MenuItem>
+                    <MenuItem value={11}>11 - Essay New</MenuItem> */}
                   </Select>
                 </FormControl>
               </Box>

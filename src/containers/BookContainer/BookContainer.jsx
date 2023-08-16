@@ -55,10 +55,20 @@ const BookContainer = () => {
                     <Typography gutterBottom variant="h5" component="h2">
                       {card.name}
                     </Typography>
-                    <Typography>{card.description}</Typography>
+                    <Typography
+                      sx={{
+                        // Limit description to 2-3 lines and display "..."
+                        display: "-webkit-box",
+                        overflow: "hidden",
+                        "-webkit-line-clamp": 3, // Number of lines
+                        "-webkit-box-orient": "vertical", // Text orientation
+                      }}
+                    >
+                      {card.description}
+                    </Typography>
                   </CardContent>
                   <CardActions>
-                    <Button size="small">View</Button>
+                    <Button size="small">Views</Button>
                     <Button size="small">Edit</Button>
                   </CardActions>
                 </Card>
