@@ -24,14 +24,14 @@ export default function BasicSpeedDial() {
         sx={{ position: "absolute", bottom: 16, right: 16 }}
         icon={<ShoppingCart />}
       >
-        {actions.map((action) => (
+        {/* {actions.map((action) => (
           <SpeedDialAction
             key={action.name}
             icon={action.icon}
             tooltipTitle={action.name}
             about={action.desc}
           />
-        ))}
+        ))} */}
       </SpeedDial>
     </Box>
   );

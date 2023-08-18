@@ -15,6 +15,8 @@ import Login from "../Login/Login";
 import "./Home.css";
 import { useNavigate } from "react-router-dom";
 import BasicSpeedDial from "../../components/SpeedDial/BasicSpeedDial";
+import Cart from "../Cart/Cart";
+import { ToastContainer, toast } from "react-toastify";
 
 const Home = ({ isloggedIn, setLoggedIn, setRole, role, setBookId }) => {
   const [data, setData] = useState([]);
@@ -23,6 +25,8 @@ const Home = ({ isloggedIn, setLoggedIn, setRole, role, setBookId }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedValue, setSelectedValue] = useState(null); // Add this line
   const navigatetoComponent = useNavigate();
+  const [showCart, setShowCart] = useState(false);
+  const [bookIdforCart, setbookIdforCart] = useState([]);
   useEffect(() => {
     axios
       .get("https://book-e-sell-node-api.vercel.app/api/book/all")
@@ -41,7 +45,8 @@ const Home = ({ isloggedIn, setLoggedIn, setRole, role, setBookId }) => {
         item.description.toLowerCase().includes(searchQuery.toLowerCase())
     );
     setFilteredData(filtered);
-  }, [data, searchQuery]);
+    // console.log(bookIdforCart);
+  }, [data, searchQuery, bookIdforCart]);
 
   useEffect(() => {
     // Update filtered data when selectedValue changes
@@ -52,8 +57,16 @@ const Home = ({ isloggedIn, setLoggedIn, setRole, role, setBookId }) => {
     }
   }, [selectedValue, data]);
 
+  const handleAddtoCart = (id) => {
+    // alert("hello");
+    setbookIdforCart([...bookIdforCart, id]);
+    toast.success("Book Added");
+    // setShowCart(true);
+    // console.log(bookIdforCart);
+  };
   return (
     <div>
+      {showCart ? <Cart bookIdforCart={bookIdforCart} /> : null}
       {/* <NavBar /> */}
       {isloggedIn ? (
         <>
@@ -137,7 +150,14 @@ const Home = ({ isloggedIn, setLoggedIn, setRole, role, setBookId }) => {
                           Edit
                         </Button>
                       ) : null}
-                      <Button size="small">Add to cart</Button>
+                      <Button
+                        onClick={() => {
+                          handleAddtoCart(card.id);
+                        }}
+                        size="small"
+                      >
+                        Add to cart
+                      </Button>
                     </CardActions>
                   </Card>
                 </Grid>
@@ -150,9 +170,13 @@ const Home = ({ isloggedIn, setLoggedIn, setRole, role, setBookId }) => {
               bottom: 16,
               right: 16,
             }}
+            onClick={() => {
+              setShowCart(!showCart);
+            }}
           >
             <BasicSpeedDial />
-          </div>
+          </div>{" "}
+          <ToastContainer autoClose={1000} limit={1} />
         </>
       ) : (
         <Login setLoggedIn={setLoggedIn} setRole={setRole} role={role} />
